@@ -6,5 +6,8 @@ module.exports = {
     },
     isGpsEnabled: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "Mobees", "isGpsEnabled", []);
+    },
+    isConnected: function (successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "Mobees", "isConnected", []);
     }
 };
