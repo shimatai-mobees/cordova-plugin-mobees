@@ -1,6 +1,6 @@
 # Cordova Hello World Plugin
 
-Simple plugin that returns your string prefixed with hello.
+Simple plugin that returns your string prefixed with mobees.
 
 Greeting a user with "Hello, world" is something that could be done in JavaScript. This plugin provides a simple example demonstrating how Cordova plugins work.
 
@@ -8,12 +8,12 @@ Greeting a user with "Hello, world" is something that could be done in JavaScrip
 
 Create a new Cordova Project
 
-    $ cordova create hello com.example.helloapp Hello
+    $ cordova create mobees com.example.mobeesapp Hello
     
 Install the plugin
 
-    $ cd hello
-    $ cordova plugin add https://github.com/don/cordova-plugin-hello.git
+    $ cd mobees
+    $ cordova plugin add https://github.com/shimatai-mobees/cordova-plugin-mobees.git
     
 
 Edit `www/js/index.js` and add the following code inside `onDeviceReady`
@@ -27,7 +27,7 @@ Edit `www/js/index.js` and add the following code inside `onDeviceReady`
         alert("Error calling Hello Plugin");
     }
 
-    hello.greet("World", success, failure);
+    mobees.greet("World", success, failure);
 ```
 
 Install iOS or Android platform
