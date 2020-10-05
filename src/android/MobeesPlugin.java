@@ -2,10 +2,12 @@ package br.com.mobees.parceiro.plugin;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
@@ -51,6 +53,12 @@ public class MobeesPlugin extends CordovaPlugin {
             callbackContext.success(isConnected + "");
 
             return true;
+        } else if (action.equals("setUser")) {
+            final String cpf = data.getString(0);
+            final String authTk = data.getString(1);
+            final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPrefs.edit().putString("cpf", cpf).apply();
+            sharedPrefs.edit().putString("authTk", authTk).apply();
         }
 
         return false;
