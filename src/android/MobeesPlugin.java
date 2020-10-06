@@ -59,6 +59,14 @@ public class MobeesPlugin extends CordovaPlugin {
             final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPrefs.edit().putString("cpf", cpf).apply();
             sharedPrefs.edit().putString("authTk", authTk).apply();
+
+            return true;
+        } else if (action.equals("logout")) {
+            final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPrefs.edit().remove("cpf").apply();
+            sharedPrefs.edit().remove("authTk").apply();
+
+            return true;
         }
 
         return false;
