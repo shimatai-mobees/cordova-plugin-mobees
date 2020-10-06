@@ -8,9 +8,11 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -38,7 +40,7 @@ public class MobeesPlugin extends CordovaPlugin {
 
             return true;
         } else if (action.equals("hasGpsPermission")) {
-            callbackContext.success("" + hasGpsPermission());
+            callbackContext.success("" + hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
 
         } else if (action.equals("requestGpsPermission")) {
 
@@ -67,12 +69,14 @@ public class MobeesPlugin extends CordovaPlugin {
             sharedPrefs.edit().remove("authTk").apply();
 
             return true;
+        } else if (action.equals("hasNotificationPermission")) {
+            callbackContext.success("" + NotificationManagerCompat.from(context).areNotificationsEnabled());
         }
 
         return false;
     }
 
-    private boolean hasGpsPermission() {
-        return (ContextCompat.checkSelfPermission(super.cordova.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
+    private boolean hasPermission(final String permission) {
+        return (ContextCompat.checkSelfPermission(super.cordova.getContext(), permission) != PackageManager.PERMISSION_GRANTED);
     }
 }
