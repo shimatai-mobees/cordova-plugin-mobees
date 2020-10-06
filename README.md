@@ -1,4 +1,4 @@
-# Cordova Hello World Plugin
+# Cordova Mobees Plugin
 
 Simple plugin that returns your string prefixed with mobees.
 
@@ -8,7 +8,7 @@ Greeting a user with "Hello, world" is something that could be done in JavaScrip
 
 Create a new Cordova Project
 
-    $ cordova create mobees com.example.mobeesapp Hello
+    $ cordova create mobees br.com.mobees.app MyApp
     
 Install the plugin
 
@@ -19,15 +19,15 @@ Install the plugin
 Edit `www/js/index.js` and add the following code inside `onDeviceReady`
 
 ```js
-    var success = function(message) {
+    let success = function(message) {
         alert(message);
     }
 
-    var failure = function() {
-        alert("Error calling Hello Plugin");
+    let failure = function() {
+        alert("Error calling Mobees Plugin");
     }
 
-    mobees.greet("World", success, failure);
+    mobees.toast("Hello world!", success, failure);
 ```
 
 Install iOS or Android platform
