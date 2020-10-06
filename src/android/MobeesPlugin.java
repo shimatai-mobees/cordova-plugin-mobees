@@ -67,7 +67,8 @@ public class MobeesPlugin extends CordovaPlugin {
             final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPrefs.edit().remove("cpf").apply();
             sharedPrefs.edit().remove("authTk").apply();
-
+            callbackContext.success("true");
+            
             return true;
         } else if (action.equals("hasNotificationPermission")) {
             callbackContext.success("" + NotificationManagerCompat.from(context).areNotificationsEnabled());

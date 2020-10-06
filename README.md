@@ -1,15 +1,7 @@
 # Cordova Mobees Plugin
 
-Simple plugin that returns your string prefixed with mobees.
+## Usage
 
-Greeting a user with "Hello, world" is something that could be done in JavaScript. This plugin provides a simple example demonstrating how Cordova plugins work.
-
-## Using
-
-Create a new Cordova Project
-
-    $ cordova create mobees br.com.mobees.app MyApp
-    
 Install the plugin
 
     $ cd mobees
@@ -19,15 +11,43 @@ Install the plugin
 Edit `www/js/index.js` and add the following code inside `onDeviceReady`
 
 ```js
-    let success = function(message) {
-        alert(message);
-    }
-
-    let failure = function() {
+    mobees.isGpsEnabled((result) => {
+        alert('Result isGpsEnabled: ' + result); // Result: true | false
+    }, () => {
         alert("Error calling Mobees Plugin");
-    }
+    });
 
-    mobees.toast("Hello world!", success, failure);
+    mobees.hasGpsPermission((result) => {
+        alert('Result hasGpsPermission: ' + result); // Result: true | false
+    }, () => {
+        alert("Error calling Mobees Plugin");
+    });
+
+    mobees.requestGpsPermission((result) => {
+        alert('Result requestGpsPermission: ' + result); // Retorno 'requested'
+    }, () => {
+        alert("Error calling Mobees Plugin");
+    });
+
+    mobees.isConnected((result) => {
+        alert('Result isConnected: ' + result); // Result: true | false
+    }, () => {
+        alert("Error calling Mobees Plugin");
+    });
+
+    mobees.toast("Teste de toast nativo!", () => {}, () => {});
+
+    mobees.hasNotificationPermission((result) => {
+        alert('Result hasNotificationPermission: ' + result); // Result: true | false
+    }, () => {
+        alert("Error calling Mobees Plugin");
+    });
+
+    mobees.logout((result) => {
+        alert('Result logout: ' + result);
+    }, () => {
+        alert("Error calling Mobees Plugin");
+    });
 ```
 
 Install iOS or Android platform
