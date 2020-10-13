@@ -72,6 +72,7 @@ public class MobeesPlugin extends CordovaPlugin {
             return true;
         } else if (action.equals("hasNotificationPermission")) {
             callbackContext.success("" + NotificationManagerCompat.from(context).areNotificationsEnabled());
+            return true;
         }
 
         return false;
