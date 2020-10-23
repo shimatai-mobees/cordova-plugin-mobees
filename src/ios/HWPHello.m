@@ -2,11 +2,11 @@
 
 @implementation HWPHello
 
-- (void)greet:(CDVInvokedUrlCommand*)command
+- (void)toast:(CDVInvokedUrlCommand*)command
 {
 
     NSString* name = [[command arguments] objectAtIndex:0];
-    NSString* msg = [NSString stringWithFormat: @"Hello, %@", name];
+    NSString* msg = [NSString stringWithFormat: @"%@", name];
 
     CDVPluginResult* result = [CDVPluginResult
                                resultWithStatus:CDVCommandStatus_OK
