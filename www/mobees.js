@@ -18,5 +18,14 @@ module.exports = {
     },
     setUser: function (cpf, authTk, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "Mobees", "setUser", [cpf, authTk]);
+    },
+    isNotificationEnabled: function (cpf, authTk, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "Mobees", "isNotificationEnabled", []);
+    },
+    getVersionCode: function (cpf, authTk, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "Mobees", "getVersionCode", []);
+    },
+    getAppVersion: function (cpf, authTk, successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "Mobees", "getAppVersion", []);
     }
 };
