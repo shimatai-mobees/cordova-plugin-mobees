@@ -1,12 +1,16 @@
 package br.com.mobees.parceiro.plugin;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -18,6 +22,8 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import java.util.List;
 
 public class MobeesPlugin extends CordovaPlugin {
 
@@ -44,7 +50,7 @@ public class MobeesPlugin extends CordovaPlugin {
 
         } else if (action.equals("requestGpsPermission")) {
 
-            ActivityCompat.requestPermissions(super.cordova.getActivity(), new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, 1000);
+            ActivityCompat.requestPermissions(super.cordova.getActivity(), new String[] {  Manifest.permission.ACCESS_COARSE_LOCATION  }, 1000);
             callbackContext.success("requested");
 
         } else if (action.equals("isConnected")) {
@@ -70,8 +76,32 @@ public class MobeesPlugin extends CordovaPlugin {
             callbackContext.success("true");
             
             return true;
-        } else if (action.equals("hasNotificationPermission")) {
-            callbackContext.success("" + NotificationManagerCompat.from(context).areNotificationsEnabled());
+        } else if (action.equals("hasNotificationPermission") || action.equals("isNotificationEnabled")) {
+            callbackContext.success("" + areNotificationsEnabled(context));
+            return true;
+        } else if (action.equals("getVersionCode")) {
+            final PackageManager manager = context.getPackageManager();
+            try {
+                final PackageInfo info = manager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    callbackContext.success(info.getLongVersionCode() + "");
+                } else {
+                    callbackContext.success(info.versionCode + "");
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+
+            return true;
+        } else if (action.equals("getAppVersion")) {
+            final PackageManager manager = context.getPackageManager();
+            try {
+                final PackageInfo info = manager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
+                callbackContext.success(info.versionName);
+            } catch (PackageManager.NameNotFoundException e) {
+                return false;
+            }
+
             return true;
         }
 
@@ -80,5 +110,24 @@ public class MobeesPlugin extends CordovaPlugin {
 
     private boolean hasPermission(final String permission) {
         return (ContextCompat.checkSelfPermission(super.cordova.getContext(), permission) != PackageManager.PERMISSION_GRANTED);
+    }
+
+    private boolean areNotificationsEnabled(final Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            if (!manager.areNotificationsEnabled()) {
+                return false;
+            }
+
+            List<NotificationChannel> channels = manager.getNotificationChannels();
+            for (NotificationChannel channel : channels) {
+                if (channel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return NotificationManagerCompat.from(context).areNotificationsEnabled();
+        }
     }
 }
