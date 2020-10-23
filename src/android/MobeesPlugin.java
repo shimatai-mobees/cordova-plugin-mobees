@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -42,11 +43,15 @@ public class MobeesPlugin extends CordovaPlugin {
 
         } else if (action.equals("isGpsEnabled")) {
             final LocationManager manager = (LocationManager)  context.getSystemService(Context.LOCATION_SERVICE );
-            callbackContext.success(manager.isProviderEnabled(LocationManager.GPS_PROVIDER) + "");
+            boolean enabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            Log.i("MobeesPlugin", "### isGpsEnabled? " + enabled);
+            callbackContext.success("" + enabled);
 
             return true;
         } else if (action.equals("hasGpsPermission")) {
-            callbackContext.success("" + hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+            boolean hasPermission = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            Log.i("MobeesPlugin", "### hasGpsPermission? " + hasPermission);
+            callbackContext.success("" + hasPermission);
 
         } else if (action.equals("requestGpsPermission")) {
 
@@ -58,18 +63,21 @@ public class MobeesPlugin extends CordovaPlugin {
 
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            Log.i("MobeesPlugin", "### isConnected? " + isConnected);
             callbackContext.success(isConnected + "");
 
             return true;
         } else if (action.equals("setUser")) {
             final String cpf = data.getString(0);
             final String authTk = data.getString(1);
+            Log.i("MobeesPlugin", "### setUser('" + cpf + "', '" + authTk + "')");
             final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPrefs.edit().putString("cpf", cpf).apply();
             sharedPrefs.edit().putString("authTk", authTk).apply();
 
             return true;
         } else if (action.equals("logout")) {
+            Log.i("MobeesPlugin", "### logout");
             final SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPrefs.edit().remove("cpf").apply();
             sharedPrefs.edit().remove("authTk").apply();
@@ -77,15 +85,19 @@ public class MobeesPlugin extends CordovaPlugin {
             
             return true;
         } else if (action.equals("hasNotificationPermission") || action.equals("isNotificationEnabled")) {
-            callbackContext.success("" + areNotificationsEnabled(context));
+            boolean enabled = areNotificationsEnabled(context);
+            Log.i("MobeesPlugin", "### isNotificationEnabled? " + enabled);
+            callbackContext.success("" + enabled);
             return true;
         } else if (action.equals("getVersionCode")) {
             final PackageManager manager = context.getPackageManager();
             try {
                 final PackageInfo info = manager.getPackageInfo(context.getPackageName(), PackageManager.GET_ACTIVITIES);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    Log.i("MobeesPlugin", "### getVersionCode: " + info.getLongVersionCode());
                     callbackContext.success(info.getLongVersionCode() + "");
                 } else {
+                    Log.i("MobeesPlugin", "### getVersionCode: " + info.versionCode);
                     callbackContext.success(info.versionCode + "");
                 }
             } catch (PackageManager.NameNotFoundException e) {
